@@ -1,0 +1,25 @@
+<nav class="sidebar flex-shrink-0 py-3" style="width: 250px;">
+    <h4 class="text-center text-white border-bottom border-secondary pb-3 mb-3">SaaS Gestão</h4>
+    <ul class="list-unstyled">
+        <li><a href="{% url 'dashboard' %}">🏠 Dashboard</a></li>
+
+        <li>
+            <a href="#menuProdutos" data-bs-toggle="collapse" aria-expanded="false" class="d-flex justify-content-between align-items-center">
+                <span>📦 Produtos</span>
+                <small class="text-secondary">▼</small>
+            </a>
+            
+            <ul class="collapse list-unstyled bg-dark" id="menuProdutos">
+                <li><a href="{% url 'produtos:lista' %}" class="ps-5 text-light">📋 Catálogo</a></li>
+                <li><a href="{% url 'produtos:cadastro' %}" class="ps-5 text-light">➕ Cadastrar Produto</a></li>
+                <li><a href="{% url 'produtos:categoria_lista' %}" class="ps-5 text-light">🏷️ Categorias</a></li>
+                <li><a href="{% url 'produtos:categoria_cadastro' %}" class="ps-5 text-light">➕ Cadastrar Categoria</a></li>
+            </ul>
+        </li>
+
+        <li><a href="#">🤝 Clientes</a></li>
+        <li><a href="#">🏢 Fornecedores</a></li>
+        <li><a href="#">🛒 Vendas (PDV)</a></li>
+        <li><a href="#">⚙️ Configurações</a></li>
+    </ul>
+</nav>

@@ -1,0 +1,7 @@
+<header class="d-flex justify-content-between align-items-center bg-white p-3 mb-4 shadow-sm rounded">
+    <h5 class="m-0 text-secondary">{% block page_title %}Visão Geral{% endblock %}</h5>
+    <div class="d-flex align-items-center">
+        <span class="me-3 fw-bold">{{ request.user.username|title }}</span>
+        <a href="#" class="btn btn-sm btn-outline-danger">Sair</a>
+    </div>
+</header>

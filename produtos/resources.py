@@ -1,6 +1,6 @@
 from import_export import resources, fields
 from import_export.widgets import ForeignKeyWidget
-from .models import Product, Category
+from produtos.models import Product, Category
 
 class ProductResource(resources.ModelResource):
     # Tratamento especial para a Categoria (buscar pelo nome na planilha)
