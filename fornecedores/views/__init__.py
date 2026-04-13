@@ -1,0 +1,3 @@
+from .lista import fornecedor_lista_view
+from .forms import fornecedor_cadastro_view, fornecedor_editar_view
+from .acoes import fornecedor_deletar_view, fornecedor_bulk_deletar_view

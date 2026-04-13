@@ -1,9 +1,9 @@
 <form 
-    hx-post="{% url 'produtos:cadastro' %}" 
+    hx-post="{% if produto %}{% url 'produtos:editar' produto.id %}{% else %}{% url 'produtos:cadastro' %}{% endif %}" 
     hx-target="#container-do-formulario" 
     hx-swap="innerHTML"
     novalidate>
-
+    
     {% csrf_token %}
 
     {% if form.non_field_errors %}

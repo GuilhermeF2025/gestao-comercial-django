@@ -1,0 +1,22 @@
+<form hx-post="{% if fornecedor %}{% url 'fornecedores:editar' fornecedor.id %}{% else %}{% url 'fornecedores:cadastro' %}{% endif %}" 
+      hx-target="#container-do-formulario" hx-swap="innerHTML" novalidate>
+    
+    {% csrf_token %}
+    {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+    
+    <div class="row g-3">
+        {% for field in form %}
+            <div class="col-md-{% if field.name == 'address' %}12{% else %}6{% endif %}">
+                <label class="form-label fw-bold">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}<div class="text-danger small mt-1"><strong>Erro:</strong> {{ field.errors.0 }}</div>{% endif %}
+            </div>
+        {% endfor %}
+    </div>
+    
+    <hr class="my-4">
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-success px-4 py-2">💾 Salvar Fornecedor</button>
+        <a href="{% url 'fornecedores:lista' %}" class="btn btn-outline-secondary py-2">Voltar</a>
+    </div>
+</form>

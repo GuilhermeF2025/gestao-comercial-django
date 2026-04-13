@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Fornecedor | SaaS Gestão{% endblock %}
+{% block page_title %}{% if fornecedor %}Editar Fornecedor{% else %}Novo Fornecedor{% endif %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <h5 class="card-title text-secondary mb-4">Informações do Fornecedor</h5>
+                <div id="container-do-formulario">
+                    {% include 'partials/fornecedores/_form.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

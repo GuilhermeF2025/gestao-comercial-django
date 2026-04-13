@@ -1,0 +1,50 @@
+<table class="table table-hover align-middle mb-0">
+    <thead class="table-light">
+        <tr>
+            <th style="width: 40px;">
+                <input type="checkbox" class="form-check-input" onclick="toggleAllCheckboxes(this)">
+            </th>
+            <th>Nome / Razão Social</th>
+            <th>CPF/CNPJ</th>
+            <th>Contato</th>
+            <th class="text-center">Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cliente in clientes %}
+        <tr id="cliente-{{ cliente.id }}">
+            <td>
+                <input type="checkbox" name="selected_ids" value="{{ cliente.id }}" class="form-check-input client-checkbox">
+            </td>
+            <td><strong>{{ cliente.name }}</strong></td>
+            <td>{{ cliente.cpf_cnpj }}</td>
+            <td>
+                <div class="small">
+                    {% if cliente.email %}<div>📧 {{ cliente.email }}</div>{% endif %}
+                    {% if cliente.phone %}<div>📞 {{ cliente.phone }}</div>{% endif %}
+                </div>
+            </td>
+            <td class="text-center">
+                <div class="btn-group btn-group-sm">
+                    <a href="{% url 'clientes:editar' cliente.id %}" class="btn btn-outline-primary" title="Editar">✏️</a>
+                    <button class="btn btn-outline-danger" 
+                        hx-post="{% url 'clientes:deletar' cliente.id %}"
+                        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' 
+                        hx-confirm="Tem certeza que deseja desativar este cliente?"
+                        hx-target="#cliente-{{ cliente.id }}"
+                        hx-swap="outerHTML swap:1s" title="Desativar">🗑️</button>
+                </div>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" class="text-center py-4 text-muted">Nenhum cliente encontrado.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+    function toggleAllCheckboxes(master) {
+        const checkboxes = document.getElementsByClassName('client-checkbox');
+        for (let i = 0; i < checkboxes.length; i++) checkboxes[i].checked = master.checked;
+    }
+</script>

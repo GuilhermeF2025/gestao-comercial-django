@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Cliente | SaaS Gestão{% endblock %}
+{% block page_title %}{% if cliente %}Editar Cliente{% else %}Novo Cliente{% endif %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <h5 class="card-title text-secondary mb-4">Informações do Cliente</h5>
+                
+                <div id="container-do-formulario">
+                    {% include 'partials/clientes/_form.html' %}
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

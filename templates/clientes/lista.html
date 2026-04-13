@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Clientes | SaaS Gestão{% endblock %}
+{% block page_title %}Gestão de Clientes{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body p-4 d-flex justify-content-between align-items-center">
+        
+        <div class="w-50">
+            <div class="input-group shadow-sm">
+                <input type="text" id="campo-busca" name="q" class="form-control" placeholder="Buscar por nome ou documento..."
+                    hx-get="{% url 'clientes:lista' %}" hx-trigger="input changed delay:500ms, search" hx-target="#tabela-container">
+                <button class="btn btn-outline-secondary bg-light" type="button" 
+                    onclick="document.getElementById('campo-busca').value=''; htmx.trigger('#campo-busca', 'input');">✖</button>
+            </div>
+        </div>
+        
+        <div class="d-flex gap-2">
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle shadow-sm" type="button" data-bs-toggle="dropdown">
+                    ⚙️ Opções
+                </button>
+                <ul class="dropdown-menu shadow">
+                    <li>
+                        <button class="dropdown-item text-danger" 
+                            hx-post="{% url 'clientes:bulk_deletar' %}"
+                            hx-include="[name='selected_ids']"
+                            hx-target="#tabela-container"
+                            hx-confirm="Tem certeza que deseja desativar TODOS os clientes selecionados?"
+                            hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+                            🗑️ Deletar Selecionados
+                        </button>
+                    </li>
+                </ul>
+            </div>
+
+            <a href="{% url 'clientes:cadastro' %}" class="btn btn-primary shadow-sm">+ Novo Cliente</a>
+        </div>
+
+    </div>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-0" id="tabela-container">
+        {% include 'partials/clientes/_tabela.html' %}
+    </div>
+</div>
+{% endblock %}
