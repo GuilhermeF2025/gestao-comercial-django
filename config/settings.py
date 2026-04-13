@@ -26,6 +26,8 @@ INSTALLED_APPS = [
     
     # Bibliotecas de Terceiros
     'simple_history',
+
+    'import_export', # Adicione esta linha
     
     # Nossos Apps
     'core',

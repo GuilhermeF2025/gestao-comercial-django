@@ -1,0 +1,64 @@
+<table class="table table-hover align-middle mb-0" id="produtos-table">
+    <thead class="table-light">
+        <tr>
+            <th style="width: 40px;">
+                <input type="checkbox" class="form-check-input" id="select-all-checkbox" 
+                       onclick="toggleAllCheckboxes(this)">
+            </th>
+            <th>SKU</th>
+            <th>Produto</th>
+            <th>Categoria</th>
+            <th>Estoque</th>
+            <th>Preço (R$)</th>
+            <th class="text-center">Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for produto in produtos %}
+        <tr id="produto-{{ produto.id }}">
+            <td>
+                <input type="checkbox" name="selected_ids" value="{{ produto.id }}" 
+                       class="form-check-input product-checkbox">
+            </td>
+            <td><strong>{{ produto.sku }}</strong></td>
+            <td>{{ produto.name }}</td>
+            <td><span class="badge bg-secondary">{{ produto.category.name }}</span></td>
+            <td>
+                {% if produto.current_stock <= produto.min_stock %}
+                    <span class="text-danger fw-bold">{{ produto.current_stock }} {{ produto.unit }}</span>
+                {% else %}
+                    <span class="text-success">{{ produto.current_stock }} {{ produto.unit }}</span>
+                {% endif %}
+            </td>
+            <td>{{ produto.sale_price }}</td>
+            <td class="text-center">
+                <div class="btn-group btn-group-sm">
+                    <a href="{% url 'produtos:editar' produto.id %}" class="btn btn-outline-primary">✏️</a>
+                    <button 
+                        class="btn btn-outline-danger" 
+                        hx-post="{% url 'produtos:deletar' produto.id %}"
+                        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' 
+                        hx-confirm="Deseja desativar este produto?"
+                        hx-target="#produto-{{ produto.id }}"
+                        hx-swap="outerHTML">
+                        🗑️
+                    </button>
+                </div>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="7" class="text-center py-4 text-muted">Nenhum produto encontrado.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+    function toggleAllCheckboxes(master) {
+        const checkboxes = document.getElementsByClassName('product-checkbox');
+        for (let i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = master.checked;
+        }
+    }
+</script>

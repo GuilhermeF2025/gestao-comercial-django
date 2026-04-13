@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block title %}Produtos | SaaS Gestão{% endblock %}
+{% block page_title %}Catálogo de Produtos{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body p-4 d-flex justify-content-between align-items-center">
+        
+        <div class="w-50">
+            <div class="input-group shadow-sm">
+                <input 
+                    type="text" 
+                    id="campo-busca"
+                    name="q" 
+                    class="form-control" 
+                    placeholder="Buscar por nome ou SKU..."
+                    hx-get="{% url 'produtos:lista' %}"
+                    hx-trigger="input changed delay:500ms, search"
+                    hx-target="#tabela-container">
+                
+                <button 
+                    class="btn btn-outline-secondary bg-light" 
+                    type="button" 
+                    title="Limpar Busca"
+                    onclick="document.getElementById('campo-busca').value=''; htmx.trigger('#campo-busca', 'input');">
+                    ✖
+                </button>
+            </div>
+        </div>
+        
+        <div class="d-flex gap-2">
+            
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle shadow-sm" type="button" data-bs-toggle="dropdown">
+                    ⚙️ Opções
+                </button>
+                <ul class="dropdown-menu shadow">
+                    <li>
+                        <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalImportar">
+                            📤 Importar CSV
+                        </button>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'produtos:exportar' %}">
+                            📥 Exportar CSV
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <button class="dropdown-item text-danger" 
+                            hx-post="{% url 'produtos:bulk_deletar' %}"
+                            hx-include="[name='selected_ids']"
+                            hx-target="#tabela-container"
+                            hx-confirm="Tem certeza que deseja desativar TODOS os produtos selecionados?"
+                            hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+                            🗑️ Deletar Selecionados
+                        </button>
+                    </li>
+                </ul>
+            </div>
+
+            <a href="{% url 'produtos:cadastro' %}" class="btn btn-primary shadow-sm">
+                + Novo Produto
+            </a>
+            
+        </div>
+
+    </div>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-0" id="tabela-container">
+        {% include 'partials/produtos/_tabela.html' %}
+    </div>
+</div>
+
+<div class="modal fade" id="modalImportar" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-light">
+        <h5 class="modal-title">Importar Produtos</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form hx-post="{% url 'produtos:importar' %}" 
+              hx-encoding="multipart/form-data" 
+              hx-target="#msg-importacao">
+            
+            {% csrf_token %}
+            
+            <div class="mb-4">
+                <label class="form-label fw-bold">Selecione o arquivo CSV</label>
+                <input type="file" name="arquivo" class="form-control" accept=".csv" required>
+                <div class="form-text mt-2">
+                    Certifique-se de que a planilha contenha as colunas: 
+                    <code>sku, name, category, unit, cost_price, sale_price, current_stock</code>.
+                </div>
+            </div>
+            
+            <div id="msg-importacao" class="mb-3"></div>
+            
+            <button type="submit" class="btn btn-primary w-100 py-2">
+                🚀 Iniciar Processamento
+            </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

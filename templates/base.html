@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SaaS Gestão{% endblock %}</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <script src="{% static 'js/htmx.min.js' %}"></script>
+
+    <style>
+        body { min-height: 100vh; background-color: #f8f9fa; }
+        /* Fixando o Menu Lateral */
+        .sidebar { min-height: 100vh; background-color: #212529; }
+        .sidebar a { color: #adb5bd; text-decoration: none; padding: 12px 20px; display: block; transition: 0.2s; }
+        .sidebar a:hover { color: #fff; background-color: #343a40; border-left: 4px solid #0d6efd; }
+        .content-area { flex-grow: 1; padding: 20px; }
+    </style>
+</head>
+<body class="d-flex">
+
+    <nav class="sidebar flex-shrink-0 py-3" style="width: 250px;">
+        <h4 class="text-center text-white border-bottom border-secondary pb-3 mb-3">SaaS Gestão</h4>
+        <ul class="list-unstyled">
+            <li><a href="#">🏠 Dashboard</a></li>
+            <li><a href="{% url 'produtos:lista' %}">📦 Produtos</a></li>
+            <li><a href="#">🛒 Vendas (PDV)</a></li>
+            <li><a href="#">⚙️ Configurações</a></li>
+        </ul>
+    </nav>
+
+    <div class="content-area">
+        
+        <header class="d-flex justify-content-between align-items-center bg-white p-3 mb-4 shadow-sm rounded">
+            <h5 class="m-0 text-secondary">{% block page_title %}Visão Geral{% endblock %}</h5>
+            <div class="d-flex align-items-center">
+                <span class="me-3 fw-bold">{{ request.user.username|title }}</span>
+                <a href="#" class="btn btn-sm btn-outline-danger">Sair</a>
+            </div>
+        </header>
+
+        <main>
+            {% block content %}
+            {% endblock %}
+        </main>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- <script>
+        document.body.addEventListener('htmx:configRequest', (event) => {
+            event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+        });
+    </script> -->
+</body>
+</html>
