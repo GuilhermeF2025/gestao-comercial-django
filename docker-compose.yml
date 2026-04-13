@@ -1,0 +1,27 @@
+services:
+  db:
+    image: postgres:16
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=gestao_db
+      - POSTGRES_USER=gestao_user
+      - POSTGRES_PASSWORD=gestao_pass
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=1
+      - DATABASE_URL=postgres://gestao_user:gestao_pass@db:5432/gestao_db
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
