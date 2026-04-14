@@ -1,0 +1,65 @@
+{% if compra.status == 'PENDING' %}
+<div class="card bg-light border-0 mb-4 shadow-sm">
+    <div class="card-body">
+        <form hx-post="{% url 'compras:adicionar_item' compra.id %}" hx-target="#area-itens" hx-swap="innerHTML" class="row g-3 align-items-end" novalidate>
+            {% csrf_token %}
+            <div class="col-md-5">
+                <label class="form-label fw-bold text-secondary">Produto</label>
+                {{ item_form.product }}
+                {% if item_form.product.errors %}<div class="text-danger small mt-1">{{ item_form.product.errors.0 }}</div>{% endif %}
+            </div>
+            <div class="col-md-2">
+                <label class="form-label fw-bold text-secondary">Qtd.</label>
+                {{ item_form.quantity }}
+                {% if item_form.quantity.errors %}<div class="text-danger small mt-1">{{ item_form.quantity.errors.0 }}</div>{% endif %}
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-bold text-secondary">Custo Unitário (R$)</label>
+                {{ item_form.unit_cost }}
+                {% if item_form.unit_cost.errors %}<div class="text-danger small mt-1">{{ item_form.unit_cost.errors.0 }}</div>{% endif %}
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100 fw-bold">➕ Adicionar</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+<table class="table table-bordered align-middle">
+    <thead class="table-dark">
+        <tr>
+            <th>Produto</th>
+            <th class="text-center">Quantidade</th>
+            <th class="text-end">Custo Unitário</th>
+            <th class="text-end">Total do Item</th>
+            {% if compra.status == 'PENDING' %}<th class="text-center">Ações</th>{% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in compra.items.all %}
+        <tr>
+            <td>{{ item.product.name }}</td>
+            <td class="text-center">{{ item.quantity|floatformat:0 }} {{ item.product.unit }}</td>
+            <td class="text-end">R$ {{ item.unit_cost|floatformat:4 }}</td>
+            <td class="text-end fw-bold">R$ {{ item.total_cost|floatformat:2 }}</td>
+            
+            {% if compra.status == 'PENDING' %}
+            <td class="text-center">
+                <button class="btn btn-sm btn-outline-danger" 
+                        hx-post="{% url 'compras:remover_item' item.id %}" 
+                        hx-target="#area-itens" 
+                        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>🗑️</button>
+            </td>
+            {% endif %}
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" class="text-center py-4 text-muted">Nenhum produto adicionado nesta nota ainda.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-end align-items-center mt-3 p-3 bg-white border rounded shadow-sm">
+    <h4 class="m-0 text-secondary me-3">Total da Nota:</h4>
+    <h2 class="m-0 text-success fw-bold">R$ {{ compra.total_amount|floatformat:2 }}</h2>
+</div>

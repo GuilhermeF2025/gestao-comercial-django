@@ -18,8 +18,13 @@
         </li>
         <li><a href="{% url 'clientes:lista' %}">🤝 Clientes</a></li>
         <li><a href="{% url 'fornecedores:lista' %}">🏢 Fornecedores</a></li>
-        
-        <li><a href="#">🛒 Vendas (PDV)</a></li>
+        <li><a href="{% url 'estoque:lista' %}">📊 Extrato de Estoque</a></li>
+        <li><a href="{% url 'compras:lista' %}">📥 Entrada de Notas (Compras)</a></li>
+        <li class="nav-item">
+            <a href="{% url 'vendas:pdv' %}" class="nav-link bg-primary text-white fw-bold rounded shadow-sm my-2 text-center">
+                🛒 ABRIR PDV
+            </a>
+        </li>
         <li><a href="#">⚙️ Configurações</a></li>
     </ul>
 </nav>

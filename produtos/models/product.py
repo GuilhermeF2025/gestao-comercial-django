@@ -14,8 +14,16 @@ class Product(models.Model):
     unit = models.CharField(max_length=20, default='un', verbose_name="Unidade de Medida")
     
     # Valores Financeiros (decimal_places=4 é o padrão contábil)
-    cost_price = models.DecimalField(max_digits=12, decimal_places=4, verbose_name="Preço de Custo")
+    # cost_price = models.DecimalField(max_digits=12, decimal_places=4, verbose_name="Preço de Custo")
     sale_price = models.DecimalField(max_digits=12, decimal_places=4, verbose_name="Preço de Venda")
+
+    # O cost_price antigo pode ser apagado ou renomeado. Vamos usar estes três:
+    
+    # 1. Custo Médio (Para gerencial rápido)
+    average_cost = models.DecimalField(max_digits=10, decimal_places=4, default=0, verbose_name="Custo Médio")
+    
+    # 2. Última Compra (Custo de Reposição)
+    last_purchase_cost = models.DecimalField(max_digits=10, decimal_places=4, default=0, verbose_name="Último Custo")
     
     # Controle Físico
     current_stock = models.PositiveIntegerField(default=0, verbose_name="Estoque Atual")

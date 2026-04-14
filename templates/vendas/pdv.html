@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}PDV | SaaS Gestão{% endblock %}
+{% block page_title %}Frente de Caixa (PDV){% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card shadow-lg border-0 h-100">
+            <div class="card-header bg-primary text-white py-3 d-flex justify-content-between align-items-center">
+                <h5 class="m-0 fw-bold"><i class="bi bi-cart3"></i> Venda #{{ venda.id|stringformat:"05d" }}</h5>
+                <span class="badge bg-light text-primary">Caixa Aberto</span>
+            </div>
+            <div class="card-body bg-light p-4" id="area-carrinho">
+                {% include 'partials/vendas/_carrinho.html' %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card shadow-lg border-0 h-100">
+            <div class="card-header bg-success text-white py-3">
+                <h5 class="m-0 fw-bold">💰 Recebimento</h5>
+            </div>
+            <div class="card-body p-4 d-flex flex-column">
+                
+                <form hx-post="{% url 'vendas:finalizar' venda.id %}" hx-swap="beforeend" id="form-pagamento">
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-secondary">Vincular Cliente (Opcional)</label>
+                        {{ checkout_form.customer }}
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-secondary text-danger">Forma de Pagamento *</label>
+                        {{ checkout_form.payment_method }}
+                    </div>
+                </form>
+
+                <div class="mt-auto pt-3">
+                    <hr>
+                    <button type="submit" form="form-pagamento" class="btn btn-success btn-lg w-100 py-3 fw-bold shadow hover-lift">
+                        ✅ FINALIZAR VENDA
+                    </button>
+                    <p class="text-center mt-2 small text-muted"><i class="bi bi-info-circle"></i> O estoque será abatido automaticamente.</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Pequeno toque de UI para o botão final */
+    .hover-lift:hover { transform: translateY(-2px); transition: 0.2s ease-in-out; }
+</style>
+{% endblock %}

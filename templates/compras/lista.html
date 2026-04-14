@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Compras | SaaS Gestão{% endblock %}
+{% block page_title %}Entrada de Notas (Compras){% endblock %}
+
+{% block content %}
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body p-4 d-flex justify-content-between align-items-center">
+        <div class="w-50">
+            <div class="input-group shadow-sm">
+                <input type="text" id="campo-busca" name="q" class="form-control" placeholder="Buscar Fornecedor ou Nota..."
+                    hx-get="{% url 'compras:lista' %}" hx-trigger="input changed delay:500ms, search" hx-target="#tabela-container">
+            </div>
+        </div>
+        <a href="{% url 'compras:nova' %}" class="btn btn-primary shadow-sm fw-bold">+ Nova Entrada de Nota</a>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-0" id="tabela-container">
+        {% include 'partials/compras/_tabela_compras.html' %}
+    </div>
+</div>
+{% endblock %}

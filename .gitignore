@@ -1,8 +1,19 @@
-venv/
-*.pyc
-__pycache__/
-db.sqlite3
-.env
 staticfiles/
 media/
 .vscode/
+
+# Ambiente Virtual
+venv/
+env/
+
+# Banco de Dados Local
+db.sqlite3
+
+# Arquivos de Cache do Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Variáveis de Ambiente
+.env

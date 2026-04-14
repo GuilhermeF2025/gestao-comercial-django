@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Detalhe da Compra | SaaS Gestão{% endblock %}
+{% block page_title %}Área de Trabalho da Compra #{{ compra.id }}{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card shadow-sm border-0 bg-dark text-light">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="mb-1">🏢 {{ compra.supplier.name }}</h5>
+                    <small class="text-secondary">NF-e: {{ compra.invoice_number|default:"Sem número" }} | Data: {{ compra.issue_date|date:"d/m/Y" }}</small>
+                </div>
+                <div>
+                    {% if compra.status == 'PENDING' %}
+                        <span class="badge bg-warning text-dark fs-6">Status: Pendente (Aguardando Finalização)</span>
+                    {% else %}
+                        <span class="badge bg-success fs-6">Status: Nota Concluída e Integrada ao Estoque</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                
+                <div id="area-itens">
+                    {% include 'partials/compras/_tabela_itens.html' %}
+                </div>
+
+                {% if compra.status == 'PENDING' %}
+                <div class="mt-4 pt-3 border-top text-end">
+                    <button hx-post="{% url 'compras:finalizar' compra.id %}" 
+                            hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' 
+                            hx-confirm="ATENÇÃO: Ao concluir, esta nota gerará os Lotes FIFO, calculará o novo Custo Médio e injetará as mercadorias no Estoque. Você não poderá alterar a nota depois disso. Confirma?" 
+                            class="btn btn-success btn-lg shadow fw-bold px-5">
+                        📦 Fechar Nota e Processar Estoque
+                    </button>
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

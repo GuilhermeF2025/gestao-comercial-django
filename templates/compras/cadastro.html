@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Nova Compra | SaaS Gestão{% endblock %}
+{% block page_title %}Dados da Nota Fiscal{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <h5 class="card-title text-secondary mb-4">Passo 1: Cabeçalho da Nota</h5>
+                <form method="POST" novalidate>
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        {% for field in form %}
+                            <div class="col-md-12">
+                                <label class="form-label fw-bold">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.errors %}<div class="text-danger small mt-1">{{ field.errors.0 }}</div>{% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <hr class="my-4">
+                    <button type="submit" class="btn btn-success px-4 py-2 fw-bold">Continuar para Itens ➔</button>
+                    <a href="{% url 'compras:lista' %}" class="btn btn-outline-secondary py-2 ms-2">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
