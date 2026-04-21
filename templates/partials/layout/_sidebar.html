@@ -1,30 +1,114 @@
 <nav class="sidebar flex-shrink-0 py-3" style="width: 250px;">
     <h4 class="text-center text-white border-bottom border-secondary pb-3 mb-3">SaaS Gestão</h4>
+    
     <ul class="list-unstyled">
-        <li><a href="{% url 'dashboard' %}">🏠 Dashboard</a></li>
+        
+        <li><a href="{% url 'dashboard' %}" class="d-block px-3 py-2 text-white text-decoration-none">🏠 Dashboard</a></li>
 
-        <li>
-            <a href="#menuProdutos" data-bs-toggle="collapse" aria-expanded="false" class="d-flex justify-content-between align-items-center">
-                <span>📦 Produtos</span>
-                <small class="text-secondary">▼</small>
-            </a>
-            
-            <ul class="collapse list-unstyled bg-dark" id="menuProdutos">
-                <li><a href="{% url 'produtos:lista' %}" class="ps-5 text-light">📋 Catálogo</a></li>
-                <li><a href="{% url 'produtos:cadastro' %}" class="ps-5 text-light">➕ Cadastrar Produto</a></li>
-                <li><a href="{% url 'produtos:categoria_lista' %}" class="ps-5 text-light">🏷️ Categorias</a></li>
-                <li><a href="{% url 'produtos:categoria_cadastro' %}" class="ps-5 text-light">➕ Cadastrar Categoria</a></li>
-            </ul>
-        </li>
-        <li><a href="{% url 'clientes:lista' %}">🤝 Clientes</a></li>
-        <li><a href="{% url 'fornecedores:lista' %}">🏢 Fornecedores</a></li>
-        <li><a href="{% url 'estoque:lista' %}">📊 Extrato de Estoque</a></li>
-        <li><a href="{% url 'compras:lista' %}">📥 Entrada de Notas (Compras)</a></li>
+        {% if perms.vendas.add_sale %}
         <li class="nav-item">
-            <a href="{% url 'vendas:pdv' %}" class="nav-link bg-primary text-white fw-bold rounded shadow-sm my-2 text-center">
+            <a href="{% url 'vendas:pdv' %}" class="nav-link bg-primary text-white fw-bold rounded shadow-sm my-2 mx-3 text-center">
                 🛒 ABRIR PDV
             </a>
         </li>
-        <li><a href="#">⚙️ Configurações</a></li>
+        {% endif %}
+
+        <hr class="text-white-50 my-3">
+        <small class="text-white-50 px-3 text-uppercase fw-bold" style="font-size: 0.7rem;">Cadastros</small>
+
+        {% if perms.produtos.view_product %}
+        <li>
+            <a href="#menuProdutos" data-bs-toggle="collapse" aria-expanded="false" class="d-flex justify-content-between align-items-center text-white text-decoration-none px-3 py-2">
+                <span>📦 Produtos</span>
+                <small class="text-secondary">▼</small>
+            </a>
+            <ul class="collapse list-unstyled bg-dark" id="menuProdutos">
+                <li><a href="{% url 'produtos:lista' %}" class="d-block ps-5 text-light py-1 text-decoration-none">📋 Catálogo</a></li>
+                
+                {% if perms.produtos.add_product %}
+                <li><a href="{% url 'produtos:cadastro' %}" class="d-block ps-5 text-light py-1 text-decoration-none">➕ Cadastrar Produto</a></li>
+                {% endif %}
+                
+                <li><a href="{% url 'produtos:categoria_lista' %}" class="d-block ps-5 text-light py-1 text-decoration-none">🏷️ Categorias</a></li>
+                
+                {% if perms.produtos.add_category %}
+                <li><a href="{% url 'produtos:categoria_cadastro' %}" class="d-block ps-5 text-light py-1 text-decoration-none">➕ Cadastrar Categoria</a></li>
+                {% endif %}
+            </ul>
+        </li>
+        {% endif %}
+
+        {% if perms.clientes.view_customer %}
+        <li>
+            <a href="#menuClientes" data-bs-toggle="collapse" aria-expanded="false" class="d-flex justify-content-between align-items-center text-white text-decoration-none px-3 py-2">
+                <span>🤝 Clientes</span>
+                <small class="text-secondary">▼</small>
+            </a>
+            <ul class="collapse list-unstyled bg-dark" id="menuClientes">
+                <li><a href="{% url 'clientes:lista' %}" class="d-block ps-5 text-light py-1 text-decoration-none">📋 Consultar Clientes</a></li>
+                
+                {% if perms.clientes.add_customer %}
+                <li><a href="{% url 'clientes:cadastro' %}" class="d-block ps-5 text-light py-1 text-decoration-none">➕ Novo Cliente</a></li>
+                {% endif %}
+            </ul>
+        </li>
+        {% endif %}
+
+        {% if perms.fornecedores.view_supplier %}
+        <li>
+            <a href="#menuFornecedores" data-bs-toggle="collapse" aria-expanded="false" class="d-flex justify-content-between align-items-center text-white text-decoration-none px-3 py-2">
+                <span>🏢 Fornecedores</span>
+                <small class="text-secondary">▼</small>
+            </a>
+            <ul class="collapse list-unstyled bg-dark" id="menuFornecedores">
+                <li><a href="{% url 'fornecedores:lista' %}" class="d-block ps-5 text-light py-1 text-decoration-none">📋 Consultar Fornecedores</a></li>
+                
+                {% if perms.fornecedores.add_supplier %}
+                <li><a href="{% url 'fornecedores:cadastro' %}" class="d-block ps-5 text-light py-1 text-decoration-none">➕ Novo Fornecedor</a></li>
+                {% endif %}
+            </ul>
+        </li>
+        {% endif %}
+
+        {% if perms.compras.view_purchaserequest or perms.compras.view_purchase or perms.estoque.view_stockmovement %}
+        <hr class="text-white-50 my-3">
+        <small class="text-white-50 px-3 text-uppercase fw-bold" style="font-size: 0.7rem;">Suprimentos</small>
+
+        {% if perms.compras.view_purchaserequest %}
+        <li><a href="{% url 'compras:requisicao_lista' %}" class="d-block px-3 py-2 text-white text-decoration-none">📝 Solicitações Internas</a></li>
+        {% endif %}
+
+        {% if perms.compras.change_purchaserequest %}
+        <li><a href="{% url 'compras:requisicoes_pendentes' %}" class="d-block px-3 py-2 text-warning fw-bold text-decoration-none">⚖️ Aprovar Solicitações</a></li>
+        {% endif %}
+
+        {% if perms.compras.add_purchase %}
+        <li><a href="{% url 'compras:painel_comprador' %}" class="d-block px-3 py-2 text-info fw-bold text-decoration-none">📦 Painel do Comprador</a></li>
+        {% endif %}
+
+        {% if perms.compras.view_purchase %}
+        <li><a href="{% url 'compras:lista' %}" class="d-block px-3 py-2 text-white text-decoration-none">📥 Pedidos / Recebimento</a></li>
+        {% endif %}
+
+        {% if perms.estoque.view_stockmovement %}
+        <li><a href="{% url 'estoque:lista' %}" class="d-block px-3 py-2 text-white text-decoration-none">📊 Extrato de Estoque</a></li>
+        {% endif %}
+
+        {% endif %}
+
+        <hr class="text-white-50 my-3">
+        <li><a href="#" class="d-block px-3 py-2 text-white text-decoration-none">⚙️ Configurações</a></li>
+        
+        {% if request.user.is_superuser %}
+        <li><a href="/admin/" target="_blank" class="d-block px-3 py-2 text-warning fw-bold text-decoration-none">🔒 Painel Django</a></li>
+        {% endif %}
+        
     </ul>
 </nav>
+
+<style>
+    .sidebar a:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #fff !important;
+    }
+</style>

@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from produtos.models import Product
 
+from django.contrib.auth.decorators import login_required
+
+@login_required # <-- Adicione esta linha!
 def produto_lista_view(request):
     query = request.GET.get('q', '')
 

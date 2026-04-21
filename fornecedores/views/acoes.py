@@ -3,6 +3,10 @@ from django.http import HttpResponse
 from django.views.decorators.http import require_POST
 from fornecedores.models import Supplier
 
+from django.contrib.auth.decorators import login_required, permission_required
+
+@login_required # <-- Adicione esta linha!
+@permission_required('clientes.add_customer', raise_exception=True)
 @require_POST
 def fornecedor_deletar_view(request, pk):
     fornecedor = get_object_or_404(Supplier, pk=pk)
@@ -10,7 +14,10 @@ def fornecedor_deletar_view(request, pk):
     fornecedor.save()
     return HttpResponse("")
 
+
+@login_required # <-- Adicione esta linha!
 @require_POST
+@permission_required('clientes.add_customer', raise_exception=True)
 def fornecedor_bulk_deletar_view(request):
     ids = request.POST.getlist('selected_ids')
     if ids:

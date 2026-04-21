@@ -4,6 +4,9 @@ from django.shortcuts import render
 from tablib import Dataset
 from produtos.resources import ProductResource
 
+from django.contrib.auth.decorators import login_required
+
+@login_required # <-- Adicione esta linha!
 def produto_exportar_view(request):
     resource = ProductResource()
     dataset = resource.export()
@@ -11,6 +14,8 @@ def produto_exportar_view(request):
     response['Content-Disposition'] = 'attachment; filename="produtos_exportados.csv"'
     return response
 
+
+@login_required # <-- Adicione esta linha!
 def produto_importar_view(request):
     if request.method == 'POST' and request.FILES.get('arquivo'):
         dataset = Dataset()

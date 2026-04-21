@@ -3,6 +3,10 @@ from django.http import HttpResponse
 from clientes.models import Customer
 from clientes.forms import CustomerForm
 
+from django.contrib.auth.decorators import login_required, permission_required
+
+@login_required # <-- Adicione esta linha!
+@permission_required('clientes.add_customer', raise_exception=True)
 def cliente_cadastro_view(request):
     if request.method == 'POST':
         form = CustomerForm(request.POST)
@@ -19,6 +23,9 @@ def cliente_cadastro_view(request):
     form = CustomerForm()
     return render(request, 'clientes/cadastro.html', {'form': form})
 
+
+@login_required # <-- Adicione esta linha!
+@permission_required('clientes.add_customer', raise_exception=True)
 def cliente_editar_view(request, pk):
     cliente = get_object_or_404(Customer, pk=pk)
     if request.method == 'POST':

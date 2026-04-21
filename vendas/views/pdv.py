@@ -4,11 +4,15 @@ from vendas.models import Sale, SaleItem
 from vendas.forms import PDVItemForm, PDVCheckoutForm
 from django.db.models import Sum
 
+from django.contrib.auth.decorators import login_required
+
 def recalcular_total_venda(venda):
     total = venda.items.aggregate(Sum('total_price'))['total_price__sum'] or 0
     venda.total_amount = total
     venda.save(update_fields=['total_amount'])
 
+
+@login_required # <-- Adicione esta linha!
 def pdv_view(request):
     """Abre o Caixa. Se o usuário já tiver uma venda aberta, recupera ela. Se não, cria uma nova."""
     if request.user.is_authenticated:
@@ -29,6 +33,8 @@ def pdv_view(request):
         'checkout_form': checkout_form
     })
 
+
+@login_required # <-- Adicione esta linha!
 def pdv_adicionar_item(request, pk):
     venda = get_object_or_404(Sale, pk=pk, status='PENDING')
     form = PDVItemForm(request.POST)
@@ -54,6 +60,8 @@ def pdv_adicionar_item(request, pk):
         'erro': erro
     })
 
+
+@login_required # <-- Adicione esta linha!
 def pdv_remover_item(request, pk):
     item = get_object_or_404(SaleItem, pk=pk)
     venda = item.sale
@@ -67,6 +75,8 @@ def pdv_remover_item(request, pk):
         'item_form': PDVItemForm()
     })
 
+
+@login_required # <-- Adicione esta linha!
 def pdv_finalizar_venda(request, pk):
     venda = get_object_or_404(Sale, pk=pk, status='PENDING')
     

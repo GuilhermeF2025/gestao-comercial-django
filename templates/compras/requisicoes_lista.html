@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Solicitações | SaaS Gestão{% endblock %}
+{% block page_title %}Minhas Solicitações de Compra{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body p-4 d-flex justify-content-between align-items-center">
+        <h5 class="m-0 text-secondary">Acompanhamento de Pedidos Internos</h5>
+        {% if perms.compras.add_purchaserequest %}
+        <a href="{% url 'compras:requisicao_nova' %}" class="btn btn-primary shadow-sm fw-bold">+ Nova Solicitação</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-0">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Data</th>
+                    <th>Produto</th>
+                    <th>Qtd</th>
+                    <th>Solicitante</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for req in requisicoes %}
+                <tr>
+                    <td>{{ req.created_at|date:"d/m/Y H:i" }}</td>
+                    <td class="fw-bold">{{ req.product.name }}</td>
+                    <td>{{ req.quantity|floatformat:0 }}</td>
+                    <td>{{ req.requested_by.username }}</td>
+                    <td>
+                        {% if req.status == 'PENDING' %}
+                            <span class="badge bg-warning text-dark">⏳ Aguardando</span>
+                        {% elif req.status == 'APPROVED' %}
+                            <span class="badge bg-primary">👍 Aprovado (Em Cotação)</span>
+                        {% elif req.status == 'COMPLETED' %}
+                            <span class="badge bg-success">✅ Atendido (Comprado)</span>
+                        {% else %}
+                            <span class="badge bg-danger">❌ Rejeitado</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="5" class="text-center py-4 text-muted">Nenhuma solicitação encontrada.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

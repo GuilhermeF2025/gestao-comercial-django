@@ -4,6 +4,9 @@ from django.views.decorators.http import require_POST
 
 from produtos.models.product import Product
 
+from django.contrib.auth.decorators import login_required
+
+@login_required
 @require_POST
 def produto_deletar_view(request, pk):
     produto = get_object_or_404(Product, pk=pk)
@@ -11,6 +14,8 @@ def produto_deletar_view(request, pk):
     produto.save()
     return HttpResponse("")
 
+
+@login_required
 @require_POST
 def produto_bulk_deletar_view(request):
     ids = request.POST.getlist('selected_ids')

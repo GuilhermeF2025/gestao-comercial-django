@@ -5,11 +5,16 @@ from compras.models import Purchase, PurchaseItem
 from compras.forms import PurchaseItemForm
 from django.db.models import Sum
 
+from django.contrib.auth.decorators import login_required
+
+@login_required # <-- Adicione esta linha!
 def recalcular_total_compra(compra):
     total = compra.items.aggregate(Sum('total_cost'))['total_cost__sum'] or 0
     compra.total_amount = total
     compra.save(update_fields=['total_amount'])
 
+
+@login_required # <-- Adicione esta linha!
 @require_POST
 def adicionar_item_view(request, pk):
     compra = get_object_or_404(Purchase, pk=pk)
@@ -31,6 +36,8 @@ def adicionar_item_view(request, pk):
     # Se der erro de validação, devolve o form com os erros
     return render(request, 'partials/compras/_tabela_itens.html', {'compra': compra, 'item_form': form})
 
+
+@login_required # <-- Adicione esta linha!
 @require_POST
 def remover_item_view(request, pk):
     item = get_object_or_404(PurchaseItem, pk=pk)

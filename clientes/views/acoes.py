@@ -3,6 +3,10 @@ from django.http import HttpResponse
 from django.views.decorators.http import require_POST
 from clientes.models import Customer
 
+from django.contrib.auth.decorators import login_required, permission_required
+
+@login_required # <-- Adicione esta linha!
+@permission_required('clientes.add_customer', raise_exception=True)
 @require_POST
 def cliente_deletar_view(request, pk):
     cliente = get_object_or_404(Customer, pk=pk)
@@ -10,6 +14,9 @@ def cliente_deletar_view(request, pk):
     cliente.save()
     return HttpResponse("") # HTMX faz a linha sumir
 
+
+@login_required # <-- Adicione esta linha!
+@permission_required('clientes.add_customer', raise_exception=True)
 @require_POST
 def cliente_bulk_deletar_view(request):
     ids = request.POST.getlist('selected_ids')

@@ -127,3 +127,9 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # Substituindo o usuário padrão do Django pelo nosso
 AUTH_USER_MODEL = 'core.CustomUser'
+
+
+# --- CONFIGURAÇÕES DE AUTENTICAÇÃO ---
+LOGIN_URL = 'login' # Nome da rota de login
+LOGIN_REDIRECT_URL = 'vendas:pdv' # Para onde ir após logar com sucesso
+LOGOUT_REDIRECT_URL = 'login' # Para onde ir após sair

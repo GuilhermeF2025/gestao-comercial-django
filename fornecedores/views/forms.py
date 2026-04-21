@@ -3,6 +3,10 @@ from django.http import HttpResponse
 from fornecedores.models import Supplier
 from fornecedores.forms import SupplierForm
 
+from django.contrib.auth.decorators import login_required, permission_required
+
+@login_required # <-- Adicione esta linha!
+@permission_required('clientes.add_customer', raise_exception=True)
 def fornecedor_cadastro_view(request):
     if request.method == 'POST':
         form = SupplierForm(request.POST)
@@ -17,6 +21,9 @@ def fornecedor_cadastro_view(request):
     form = SupplierForm()
     return render(request, 'fornecedores/cadastro.html', {'form': form})
 
+
+@login_required # <-- Adicione esta linha!
+@permission_required('clientes.add_customer', raise_exception=True)
 def fornecedor_editar_view(request, pk):
     fornecedor = get_object_or_404(Supplier, pk=pk)
     if request.method == 'POST':

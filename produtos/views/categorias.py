@@ -6,6 +6,9 @@ from django.db.models import ProtectedError
 from produtos.models import Category
 from produtos.forms import CategoryForm
 
+from django.contrib.auth.decorators import login_required
+
+@login_required # <-- Adicione esta linha!
 def categoria_lista_view(request):
     query = request.GET.get('q', '')
     if query:
@@ -18,6 +21,8 @@ def categoria_lista_view(request):
 
     return render(request, 'produtos/categorias/lista.html', {'categorias': categorias})
 
+
+@login_required # <-- Adicione esta linha!
 def categoria_cadastro_view(request):
     if request.method == 'POST':
         form = CategoryForm(request.POST)
@@ -33,6 +38,8 @@ def categoria_cadastro_view(request):
     form = CategoryForm()
     return render(request, 'produtos/categorias/cadastro.html', {'form': form})
 
+
+@login_required # <-- Adicione esta linha!
 def categoria_editar_view(request, pk):
     categoria = get_object_or_404(Category, pk=pk)
     if request.method == 'POST':
@@ -45,6 +52,8 @@ def categoria_editar_view(request, pk):
         
     return render(request, 'produtos/categorias/cadastro.html', {'form': form, 'categoria': categoria})
 
+
+@login_required # <-- Adicione esta linha!
 @require_POST
 def categoria_deletar_view(request, pk):
     categoria = get_object_or_404(Category, pk=pk)

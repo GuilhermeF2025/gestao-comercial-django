@@ -3,6 +3,9 @@ from django.http import HttpResponse
 from django.views.decorators.http import require_POST
 from compras.models import Purchase
 
+from django.contrib.auth.decorators import login_required
+
+@login_required # <-- Adicione esta linha!
 @require_POST
 def finalizar_compra_view(request, pk):
     compra = get_object_or_404(Purchase, pk=pk)

@@ -1,6 +1,10 @@
 from django.shortcuts import render
 from clientes.models import Customer
 
+from django.contrib.auth.decorators import login_required, permission_required
+
+@login_required # <-- Adicione esta linha!
+@permission_required('clientes.view_customer', raise_exception=True)
 def cliente_lista_view(request):
     query = request.GET.get('q', '')
 

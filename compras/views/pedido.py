@@ -2,6 +2,9 @@ from django.shortcuts import render, get_object_or_404, redirect
 from compras.models import Purchase
 from compras.forms import PurchaseForm, PurchaseItemForm
 
+from django.contrib.auth.decorators import login_required
+
+@login_required # <-- Adicione esta linha!
 def compra_criar_view(request):
     if request.method == 'POST':
         form = PurchaseForm(request.POST)
@@ -16,6 +19,8 @@ def compra_criar_view(request):
         form = PurchaseForm()
     return render(request, 'compras/cadastro.html', {'form': form})
 
+
+@login_required # <-- Adicione esta linha!
 def compra_detalhe_view(request, pk):
     """Área de Trabalho do Pedido (Onde adicionamos os itens)"""
     compra = get_object_or_404(Purchase, pk=pk)

@@ -3,6 +3,9 @@ from django.http import HttpResponse
 from produtos.forms.product_form import ProductForm
 from produtos.models import Product
 
+from django.contrib.auth.decorators import login_required
+
+@login_required # <-- Adicione esta linha!
 def produto_cadastro_view(request):
     if request.method == 'POST':
         form = ProductForm(request.POST)
@@ -21,6 +24,8 @@ def produto_cadastro_view(request):
     form = ProductForm()
     return render(request, 'produtos/cadastro.html', {'form': form})
 
+
+@login_required # <-- Adicione esta linha!
 def produto_editar_view(request, pk):
     produto = get_object_or_404(Product, pk=pk)
     if request.method == 'POST':
